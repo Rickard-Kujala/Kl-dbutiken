@@ -151,7 +151,9 @@ namespace Klädbutiken
                     sum += item.Price;
                 }
                 Console.WriteLine($"Summa: {sum}");
+                Console.WriteLine("Tack för di betalning! ");
                 Console.ReadKey();
+                purchase.Clear();
             }
             if (choice==1)
             {

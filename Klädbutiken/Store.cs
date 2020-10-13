@@ -1,12 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading;
 
 namespace Klädbutiken
 {
     class Store
     {
-        static int TryCatch(int minvalue, int maxvalue)
+        const string fileName = "store.txt";
+
+        static int UserInput(int minvalue, int maxvalue)
         {
             bool succes = false;
             while (!succes)
@@ -45,7 +48,7 @@ namespace Klädbutiken
             Console.WriteLine("Tröja: [1]");
             Console.WriteLine("Byxor: [2]");
             Console.WriteLine("Skor:  [3]");
-            int typ = TryCatch(1, 10);
+            int typ = UserInput(1, 10);
             Plagg plagg = default;
             plagg.Type = Enum.GetName(typeof(Type), typ);
             Console.Clear();
@@ -58,7 +61,7 @@ namespace Klädbutiken
             Console.WriteLine("L:  [4]");
             Console.WriteLine("XL: [5]");
 
-            int size = TryCatch(1, 10);
+            int size = UserInput(1, 10);
             plagg.Size = Enum.GetName(typeof(Size), size);
             Console.Clear();
 
@@ -72,14 +75,14 @@ namespace Klädbutiken
             Console.WriteLine("Red:    [4]");
             Console.WriteLine("Gray:   [5]");
 
-            int colour = TryCatch(1, 10);
+            int colour = UserInput(1, 10);
 
             plagg.Colour = Enum.GetName(typeof(Colour), colour);
             Console.Clear();
 
             Console.WriteLine("Välj pris: ");
 
-            int price = TryCatch(1, 1000000);
+            int price = UserInput(1, 1000000);
             plagg.Price = price;
             Console.Clear();
             store.Add(plagg);
@@ -121,10 +124,32 @@ namespace Klädbutiken
                             Console.WriteLine("-------------------------------");
                         }
                         Console.ReadLine();
+                        List<string> menyChoice2 = new List<string>();
+                        string s4 = "Rensa sortiment.";
+                        string s5 = "Ta bort ett plagg.";
+                        string s6 = "Klar";
+                        menyChoice2.Add(s4);
+                        menyChoice2.Add(s5);
+                        menyChoice2.Add(s6);
+                        int choice2=NavigateMeny.NavigateStringList(menyChoice2);
+                        if (choice2==0)
+                        {
+                            store.Clear();
+                        }
+                        if (choice2==1)
+                        {
+
+                        }
+                        if (choice2==2)
+                        {
+
+                        }
+                            
                     }
                     if (choice==2)
                     {
                         done = true;
+                        SaveStore(store);
                     }
                 }
                 catch (Exception)
@@ -136,6 +161,18 @@ namespace Klädbutiken
                 Console.Clear();
             }
         }
+
+        private static void SaveStore(List<Plagg> store)
+        {
+            using (StreamWriter sw = new StreamWriter(fileName, false)) 
+            {
+                foreach (var item in store)
+                {
+                    sw.WriteLine($"{item.Type};{item.Size};{item.Colour};{item.Price}");
+                }
+            }
+        }
        
+
     }
 }

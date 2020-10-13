@@ -6,12 +6,24 @@ namespace Klädbutiken
 {
     class Program
     {
+        const string fileName = "store.txt";
+
         static void Main(string[] args)
         {
+
             bool isRunning = true;
-            List<Plagg> store = new List<Plagg>();
+            List<Plagg> store;
+            try
+            {
+                store = LoadStore();
+            }
+            catch /*(FileNotFoundException ex)*/
+            {
+                store = new List<Plagg>();
+            }
+
             List<Plagg> purchase = new List<Plagg>();
-            Console.WriteLine("Välkommen! ");
+            Console.WriteLine("Välkommen!");
             Thread.Sleep(1000);
 
             while (isRunning)
@@ -37,6 +49,23 @@ namespace Klädbutiken
                 }
 
             }
+        }
+        private static List<Plagg> LoadStore()
+        {
+            List<Plagg> store = new List<Plagg>();
+            string file;
+            using (StreamReader sr = new StreamReader(fileName))
+            {
+                file = sr.ReadToEnd().Trim(new []{'\r','\n'});
+            }
+            string[] plaggArray = file.Split("\n");
+            foreach (var item in plaggArray)
+            {
+                string[] props = item.Split(';');
+                var plagg = new Plagg(props[0], props[1], props[2], int.Parse(props[3].Trim('\r')));
+                store.Add(plagg);
+            }
+            return store;
         }
         public static int Meny()
         {
